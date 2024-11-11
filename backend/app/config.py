@@ -21,5 +21,9 @@ tags_metadata = [
     {
         "name": "user_data",
         "description": "Operations with user's stored data"
+    },
+    {
+        "name": "phrasal_verbs",
+        "description": "Operations for retrieving phrasal verbs"
     }
 ] 

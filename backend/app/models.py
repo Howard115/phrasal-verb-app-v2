@@ -35,3 +35,8 @@ class APIKeyResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class PhrasalVerbEntry(BaseModel):
+    phrasal_verb: str
+    meaning: str
+    example: str
