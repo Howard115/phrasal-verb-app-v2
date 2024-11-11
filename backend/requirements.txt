@@ -2,3 +2,9 @@ fastapi
 python-jose[cryptography]
 fastapi-sso
 uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+cryptography
+python-multipart
+python-dotenv
