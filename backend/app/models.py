@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel, Field
+from typing import List
 
 from .database import Base
 
@@ -40,3 +41,9 @@ class PhrasalVerbEntry(BaseModel):
     phrasal_verb: str
     meaning: str
     example: str
+
+class PhrasalVerbsStoryRequest(BaseModel):
+    phrasal_verbs: List[PhrasalVerbEntry]
+
+class PhrasalVerbStoryResponse(BaseModel):
+    story: str
