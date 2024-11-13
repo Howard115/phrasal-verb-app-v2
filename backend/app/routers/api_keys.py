@@ -48,5 +48,4 @@ async def store_user_api_key(
     
     return APIKeyResponse(
         message=f"API key stored for user {user.email}",
-        stored_api_key=api_key_input.api_key
     ) 

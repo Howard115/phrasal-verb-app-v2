@@ -32,7 +32,6 @@ class APIKeyInput(BaseModel):
 
 class APIKeyResponse(BaseModel):
     message: str
-    stored_api_key: str | None
 
     class Config:
         from_attributes = True
