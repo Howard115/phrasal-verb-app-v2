@@ -61,7 +61,7 @@ async def generate_story_with_phrasal_verbs(
     llm = ChatOpenAI(
         openai_api_key=openai_api_key, 
         model="gpt-4o", 
-        temperature=0.7
+        temperature=0.3
     )
 
     # Prepare phrasal verb details
@@ -76,7 +76,7 @@ async def generate_story_with_phrasal_verbs(
     prompt = PromptTemplate(
         input_variables=["phrasal_verb_details"],
         template="""
-        Write a concise and engaging short story in exactly 100 words that naturally 
+        Write a concise and engaging short story that naturally 
         incorporates the following phrasal verbs:
 
         {phrasal_verb_details}
