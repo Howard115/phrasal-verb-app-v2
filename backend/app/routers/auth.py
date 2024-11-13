@@ -38,7 +38,7 @@ async def login_callback(request: Request):
         if not openid:
             raise HTTPException(status_code=401, detail="Authentication failed")
     
-    expiration = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=1)
+    expiration = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=30)
     token = jwt.encode(
         {
             "pld": openid.dict(),
