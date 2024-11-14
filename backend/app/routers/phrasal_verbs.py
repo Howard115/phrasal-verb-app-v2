@@ -117,7 +117,7 @@ async def save_favorite_story(
 ):
     """Save a favorite phrasal verb story for the logged-in user."""
     # Convert phrasal verbs to JSON string for storage
-    phrasal_verbs_json = json.dumps([pv.dict() for pv in favorite.phrasal_verbs])
+    phrasal_verbs_json = json.dumps([pv.model_dump() for pv in favorite.phrasal_verbs])
     
     # Create new favorite story
     db_favorite = FavoriteStory(
