@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi_sso.sso.base import OpenID
 from sqlalchemy.orm import Session
 import random
+import json
+from typing import List
 
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
@@ -11,6 +13,8 @@ from app.models import (
     PhrasalVerbsStoryRequest,
     PhrasalVerbStoryResponse,
     UserData,
+    FavoriteStory,
+    FavoriteStorySet,
 )
 from app.utils.phrasal_verbs import load_phrasal_verbs
 from app.dependencies import get_logged_user
@@ -103,3 +107,71 @@ async def generate_story_with_phrasal_verbs(
         return PhrasalVerbStoryResponse(story=result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating story: {str(e)}")
+
+
+@router.post("/favorites")
+async def save_favorite_story(
+    favorite: FavoriteStorySet,
+    user: OpenID = Depends(get_logged_user),
+    db: Session = Depends(get_db),
+):
+    """Save a favorite phrasal verb story for the logged-in user."""
+    # Convert phrasal verbs to JSON string for storage
+    phrasal_verbs_json = json.dumps([pv.dict() for pv in favorite.phrasal_verbs])
+    
+    # Create new favorite story
+    db_favorite = FavoriteStory(
+        email=user.email,
+        story=favorite.story,
+        phrasal_verbs=phrasal_verbs_json
+    )
+    
+    db.add(db_favorite)
+    db.commit()
+    db.refresh(db_favorite)
+    
+    return "Story saved successfully"
+
+
+@router.get("/favorites", response_model=List[FavoriteStorySet])
+async def get_favorite_stories(
+    user: OpenID = Depends(get_logged_user),
+    db: Session = Depends(get_db),
+):
+    """Get all favorite stories for the logged-in user."""
+    favorites = db.query(FavoriteStory).filter(FavoriteStory.email == user.email).all()
+    
+    result = []
+    for fav in favorites:
+        phrasal_verbs = [
+            PhrasalVerbEntry(**pv) 
+            for pv in json.loads(fav.phrasal_verbs)
+        ]
+        result.append(FavoriteStorySet(
+            id=fav.id,
+            story=fav.story,
+            phrasal_verbs=phrasal_verbs
+        ))
+    
+    return result
+
+
+@router.delete("/favorites/{favorite_id}")
+async def delete_favorite_story(
+    favorite_id: int,
+    user: OpenID = Depends(get_logged_user),
+    db: Session = Depends(get_db),
+):
+    """Delete a favorite story by ID."""
+    favorite = db.query(FavoriteStory).filter(
+        FavoriteStory.id == favorite_id,
+        FavoriteStory.email == user.email
+    ).first()
+    
+    if not favorite:
+        raise HTTPException(status_code=404, detail="Favorite story not found")
+    
+    db.delete(favorite)
+    db.commit()
+    
+    return "Favorite story deleted successfully"
