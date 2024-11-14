@@ -4,8 +4,8 @@ from app.config import tags_metadata
 from app.routers import auth, numbers, api_keys, phrasal_verbs
 
 app = FastAPI(
-    title="User Data Management System",
-    description="A secure API service for managing user data with Google OAuth authentication",
+    title="Phrasal Verbs API",
+    description="An API service for generating stories with phrasal verbs",
     openapi_tags=tags_metadata
 )
 
