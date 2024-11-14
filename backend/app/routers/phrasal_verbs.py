@@ -76,17 +76,20 @@ async def generate_story_with_phrasal_verbs(
     prompt = PromptTemplate(
         input_variables=["phrasal_verb_details"],
         template="""
-        Write a concise and engaging short story that naturally 
-        incorporates the following phrasal verbs:
-
+        Create a persuasive mini-argument with an unexpected twist using these phrasal verbs:
+        
         {phrasal_verb_details}
 
-        Story Guidelines:
-        - Use each phrasal verb at least once
-        - Ensure the story demonstrates the meaning of each phrasal verb
-        - Make the story coherent and interesting
-        - Strictly limit the story to 50 words
-        - Use logical descriptions
+        Argument Requirements:
+        1. Begin with a serious academic claim
+        2. Present a logical cause-and-effect chain
+        3. Insert one surprising or humorous twist in the middle
+        4. End with a witty or memorable conclusion that ties back to the twist
+        5. Keep it under 50 words
+        6. Format each phrasal verb in **bold**
+        
+        Example:
+        "Research shows meditation **calms down** workplace stress. When companies **brought in** mindfulness programs, productivity **went up** 30%. Ironically, employees **zoned out** so peacefully, they **missed out** on fire alarms. Perhaps being too zen has its downsides."
         """
     )
 
