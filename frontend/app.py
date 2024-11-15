@@ -3,8 +3,18 @@ import requests
 from datetime import datetime
 import jwt
 
-# Check authentication state from query parameters
-is_authenticated = 'token' in st.query_params
+# Initialize token in session state if not present
+if 'token' not in st.session_state:
+    st.session_state.token = None
+
+# Check if token is in query parameters and store it
+if 'token' in st.query_params:
+    st.session_state.token = st.query_params['token']
+    # Remove token from URL to avoid exposing it
+    st.query_params.clear()
+
+# Check authentication state from session
+is_authenticated = st.session_state.token is not None
 
 st.sidebar.title("Login")
 if not is_authenticated:
@@ -15,14 +25,18 @@ if not is_authenticated:
 else:
     logout_button = st.sidebar.button("Logout")
     if logout_button:
+        # Clear token from session state
+        st.session_state.token = None
         # Redirect to backend logout endpoint 
         st.markdown(f'<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/logout">', unsafe_allow_html=True)
-
-
+print(st.session_state.token)
 
 
 def get_random_phrasal_verb():
-    response = requests.get("http://localhost:8000/phrasal-verbs/random")
+    headers = {}
+    if st.session_state.token:
+        headers['Authorization'] = f'Bearer {st.session_state.token}'
+    response = requests.get("http://localhost:8000/phrasal-verbs/random", headers=headers)
     return response.json()
 
 # Initialize phrasal_verbs in session state if it doesn't exist
