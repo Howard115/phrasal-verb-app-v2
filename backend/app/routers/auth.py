@@ -48,4 +48,14 @@ async def login_callback(request: Request):
         key=settings.SECRET_KEY,
         algorithm="HS256"
     )
-    return RedirectResponse(url=f"http://localhost:8501/?token={token}") 
+    
+    response = RedirectResponse(url="http://localhost:8501")
+    response.set_cookie(
+        key="token",
+        value=token,
+        httponly=True,  # Prevents JavaScript access
+        secure=False,   # Set to True in production with HTTPS
+        samesite="lax", # Protects against CSRF
+        max_age=30 * 24 * 60 * 60  # 30 days in seconds
+    )
+    return response 
