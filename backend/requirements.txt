@@ -8,3 +8,5 @@ pydantic-settings
 cryptography
 python-multipart
 python-dotenv
+langchain_openai
+langchain
