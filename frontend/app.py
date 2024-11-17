@@ -127,11 +127,6 @@ class UI:
                 st.button("Login with Google", on_click=Callbacks.login)
             else:
                 st.button("Logout", on_click=Callbacks.logout)
-            
-            st.title("OpenAI API Key")
-            st.text_input("Enter your OpenAI API key", type="password", key="api_key_input")
-            st.button("Save API Key", on_click=Callbacks.save_api_key)
-            st.button("Delete API Key", on_click=Callbacks.delete_api_key)
 
     @staticmethod
     def render_main_content():
