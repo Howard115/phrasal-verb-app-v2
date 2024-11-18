@@ -1,22 +1,26 @@
 import streamlit as st
-import requests
+from utils import APIHandler, UI
+
+st.set_page_config(
+    page_title="Favorite Stories",
+    page_icon="⭐",
+    layout="wide"
+)
+
+# Initialize session state for refresh tracking
+if 'refresh_favorites' not in st.session_state:
+    st.session_state.refresh_favorites = False
+
+# Render auth sidebar
+UI.render_auth_sidebar()
 
 is_authenticated = 'token' in st.context.cookies
 
-# Add at the beginning of the file
 if not is_authenticated:
     st.error("Please log in to view your favorite stories")
     st.stop()
 
-class APIHandler:
-    BASE_URL = "http://localhost:8000"
-
-    @staticmethod
-    def get_favorites():
-        return requests.get(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
-            cookies=st.context.cookies
-        )
+st.title("⭐ My Favorite Stories")
 
 # Add custom CSS
 st.markdown("""
@@ -43,12 +47,33 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+def delete_favorite(favorite_id: int):
+    response = APIHandler.delete_favorite(favorite_id)
+    if response.status_code == 200:
+        st.session_state.refresh_favorites = True
+    else:
+        st.error("Failed to delete story")
+
+# Check if we need to refresh after a deletion
+if st.session_state.refresh_favorites:
+    st.session_state.refresh_favorites = False
+    st.rerun()
+
 # Fetch and display favorites automatically
 response = APIHandler.get_favorites()
 if response.status_code == 200:
     favorites = response.json()
     for favorite in favorites:
-        with st.expander(f"Favorite Story {favorite['id']}"):
+        col1, col2 = st.columns([0.9, 0.1])
+        with col1:
+            expander = st.expander(f"Favorite Story {favorite['id']}")
+        with col2:
+            st.button("🗑️", key=f"delete_{favorite['id']}", 
+                     on_click=delete_favorite, 
+                     args=(favorite['id'],),
+                     help="Delete this story")
+        
+        with expander:
             st.markdown('<div class="pv-title">Phrasal Verbs:</div>', unsafe_allow_html=True)
             for pv in favorite['phrasal_verbs']:
                 st.markdown(f"""
@@ -70,4 +95,3 @@ if response.status_code == 200:
             st.markdown('</div>', unsafe_allow_html=True)
 else:
     st.error("Failed to fetch favorites")
-    
