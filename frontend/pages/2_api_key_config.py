@@ -1,17 +1,13 @@
 import streamlit as st
 from utils import APIHandler, UI
 
-st.set_page_config(
-    page_title="API Key Configuration",
-    page_icon="🔑",
-    layout="wide"
-)
+st.set_page_config(page_title="API Key Configuration", page_icon="🔑", layout="wide")
 
 # Render auth sidebar
 UI.render_auth_sidebar()
 
 # Check authentication status
-is_authenticated = 'token' in st.context.cookies
+is_authenticated = "token" in st.context.cookies
 
 if not is_authenticated:
     st.error("Please login first to access this page")
@@ -27,6 +23,7 @@ with col1:
 with col2:
     st.button("Delete API Key", on_click=lambda: delete_api_key())
 
+
 def save_api_key():
     api_key = st.session_state.api_key_input
     response = APIHandler.save_api_key(api_key)
@@ -34,6 +31,7 @@ def save_api_key():
         st.success(response.json().get("message", "API key saved successfully"))
     else:
         st.error("Failed to save API key")
+
 
 def delete_api_key():
     response = APIHandler.delete_api_key()

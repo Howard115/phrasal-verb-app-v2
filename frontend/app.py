@@ -1,58 +1,35 @@
 import streamlit as st
-from utils import SessionState, APIHandler, UI
+from utils import SessionState, UI
 
 st.set_page_config(
-    page_title="Phrasal Verb Story Generator",
-    page_icon="📚",
-    layout="wide"
+    page_title="Phrasal Verb Learning App", page_icon="📚", layout="wide"
 )
 
-def get_random_phrasal_verb(index: int):
-    st.session_state.phrasal_verbs[index] = APIHandler.get_random_phrasal_verb()
-    st.session_state.story = None
 
-def generate_story():
-    response = APIHandler.generate_story(st.session_state.phrasal_verbs)
-    if response.status_code == 200:
-        st.session_state.story = response.json().get("story")
-    else:
-        st.error("Failed to generate story. Make sure you have stored your OpenAI API key.")
+SessionState.init()
+UI.render_auth_sidebar()
 
-def save_favorite():
-    response = APIHandler.save_favorite_story(
-        st.session_state.phrasal_verbs,
-        st.session_state.story
+st.title("📚 Welcome to Phrasal Verb Learning App")
+
+st.markdown(
+    """
+Welcome to your interactive phrasal verb learning journey! This app helps you master English phrasal verbs through creative storytelling.
+
+### 📝 Available Features:
+
+1. **Story Generator**: Create unique stories using random phrasal verbs
+2. **Favorite Stories**: Review and manage your saved stories
+3. **Settings**: Configure your API key and preferences
+
+Choose a section from the sidebar to get started!
+"""
+)
+
+with st.expander("ℹ️ How to use this app"):
+    st.markdown(
+        """
+    1. Start with the Story Generator to practice with random phrasal verbs
+    2. Save interesting stories to your favorites for later review
+    3. Configure your API key in the settings if needed
+    """
     )
-    if response.status_code == 200:
-        st.success("Story saved to favorites!")
-    else:
-        st.error("Failed to save story to favorites")
-
-def main():
-    SessionState.init()
-    UI.render_auth_sidebar()
-    
-    st.title("📚 Phrasal Verb Story Generator")
-    st.write("Generate creative stories using random phrasal verbs!")
-    
-    columns = st.columns(3)
-    for i, col in enumerate(columns):
-        with col:
-            st.button(f"Phrasal Verb {i+1}", 
-                     on_click=get_random_phrasal_verb, 
-                     args=(i,))
-            UI.display_phrasal_verb_entry(st.session_state.phrasal_verbs[i])
-    
-    st.button("Generate Story", 
-             on_click=generate_story,
-             disabled=not all(st.session_state.phrasal_verbs))
-    
-    if st.session_state.story:
-        st.write("**Generated Story:**")
-        st.write(st.session_state.story)
-        st.button("Save to Favorites", 
-                 on_click=save_favorite,
-                 disabled=not st.session_state.story)
-
-if __name__ == "__main__":
-    main()

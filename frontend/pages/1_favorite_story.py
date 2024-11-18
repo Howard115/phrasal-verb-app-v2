@@ -1,20 +1,16 @@
 import streamlit as st
 from utils import APIHandler, UI
 
-st.set_page_config(
-    page_title="Favorite Stories",
-    page_icon="⭐",
-    layout="wide"
-)
+st.set_page_config(page_title="Favorite Stories", page_icon="⭐", layout="wide")
 
 # Initialize session state for refresh tracking
-if 'refresh_favorites' not in st.session_state:
+if "refresh_favorites" not in st.session_state:
     st.session_state.refresh_favorites = False
 
 # Render auth sidebar
 UI.render_auth_sidebar()
 
-is_authenticated = 'token' in st.context.cookies
+is_authenticated = "token" in st.context.cookies
 
 if not is_authenticated:
     st.error("Please log in to view your favorite stories")
@@ -23,7 +19,8 @@ if not is_authenticated:
 st.title("⭐ My Favorite Stories")
 
 # Add custom CSS
-st.markdown("""
+st.markdown(
+    """
 <style>
 .pv-title {
     color: #0f52ba;
@@ -45,7 +42,10 @@ st.markdown("""
     font-weight: bold;
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
+
 
 def delete_favorite(favorite_id: int):
     response = APIHandler.delete_favorite(favorite_id)
@@ -53,6 +53,7 @@ def delete_favorite(favorite_id: int):
         st.session_state.refresh_favorites = True
     else:
         st.error("Failed to delete story")
+
 
 # Check if we need to refresh after a deletion
 if st.session_state.refresh_favorites:
@@ -68,30 +69,42 @@ if response.status_code == 200:
         with col1:
             expander = st.expander(f"Favorite Story {favorite['id']}")
         with col2:
-            st.button("🗑️", key=f"delete_{favorite['id']}", 
-                     on_click=delete_favorite, 
-                     args=(favorite['id'],),
-                     help="Delete this story")
-        
+            st.button(
+                "🗑️",
+                key=f"delete_{favorite['id']}",
+                on_click=delete_favorite,
+                args=(favorite["id"],),
+                help="Delete this story",
+            )
+
         with expander:
-            st.markdown('<div class="pv-title">Phrasal Verbs:</div>', unsafe_allow_html=True)
-            for pv in favorite['phrasal_verbs']:
-                st.markdown(f"""
+            st.markdown(
+                '<div class="pv-title">Phrasal Verbs:</div>', unsafe_allow_html=True
+            )
+            for pv in favorite["phrasal_verbs"]:
+                st.markdown(
+                    f"""
                     <div class="pv-item">
                         <strong>{pv['phrasal_verb']}</strong>: {pv['meaning']}
                         <div class="pv-example">Example: {pv['example']}</div>
                     </div>
-                """, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            st.markdown('**Story:**', unsafe_allow_html=True)
+                """,
+                    unsafe_allow_html=True,
+                )
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            st.markdown("**Story:**", unsafe_allow_html=True)
             # Convert markdown bold syntax to HTML span with custom class
-            story_text = favorite['story'].replace('**', '<span class="highlighted-pv">', 1)
-            while '**' in story_text:
-                story_text = story_text.replace('**', '</span>', 1)
-                if '**' in story_text:
-                    story_text = story_text.replace('**', '<span class="highlighted-pv">', 1)
+            story_text = favorite["story"].replace(
+                "**", '<span class="highlighted-pv">', 1
+            )
+            while "**" in story_text:
+                story_text = story_text.replace("**", "</span>", 1)
+                if "**" in story_text:
+                    story_text = story_text.replace(
+                        "**", '<span class="highlighted-pv">', 1
+                    )
             st.markdown(story_text, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 else:
     st.error("Failed to fetch favorites")

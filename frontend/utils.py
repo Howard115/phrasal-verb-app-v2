@@ -1,14 +1,16 @@
 import streamlit as st
 import requests
 
+
 # State Management
 class SessionState:
     @staticmethod
     def init():
-        if 'phrasal_verbs' not in st.session_state:
+        if "phrasal_verbs" not in st.session_state:
             st.session_state.phrasal_verbs = [None] * 3
-        if 'story' not in st.session_state:
+        if "story" not in st.session_state:
             st.session_state.story = None
+
 
 # API Handlers
 class APIHandler:
@@ -19,15 +21,14 @@ class APIHandler:
         response = requests.post(
             f"{APIHandler.BASE_URL}/api-keys",
             json={"api_key": api_key},
-            cookies=st.context.cookies
+            cookies=st.context.cookies,
         )
         return response
 
     @staticmethod
     def delete_api_key():
         return requests.delete(
-            f"{APIHandler.BASE_URL}/api-keys",
-            cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/api-keys", cookies=st.context.cookies
         )
 
     @staticmethod
@@ -35,7 +36,7 @@ class APIHandler:
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/generate-story",
             json={"phrasal_verbs": phrasal_verbs},
-            cookies=st.context.cookies
+            cookies=st.context.cookies,
         )
 
     @staticmethod
@@ -47,26 +48,23 @@ class APIHandler:
     def save_favorite_story(phrasal_verbs, story):
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
-            json={
-                "phrasal_verbs": phrasal_verbs,
-                "story": story
-            },
-            cookies=st.context.cookies
+            json={"phrasal_verbs": phrasal_verbs, "story": story},
+            cookies=st.context.cookies,
         )
-        
+
     @staticmethod
     def get_favorites():
         return requests.get(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
-            cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites", cookies=st.context.cookies
         )
 
     @staticmethod
     def delete_favorite(favorite_id: int):
         return requests.delete(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites/{favorite_id}",
-            cookies=st.context.cookies
+            cookies=st.context.cookies,
         )
+
 
 # UI Components
 class UI:
@@ -82,13 +80,21 @@ class UI:
     def render_auth_sidebar():
         with st.sidebar:
             st.title("Login")
-            is_authenticated = 'token' in st.context.cookies
-            
+            is_authenticated = "token" in st.context.cookies
+
             if not is_authenticated:
-                st.button("Login with Google", on_click=lambda: st.markdown(
-                    '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/login">',
-                    unsafe_allow_html=True))
+                st.button(
+                    "Login with Google",
+                    on_click=lambda: st.markdown(
+                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/login">',
+                        unsafe_allow_html=True,
+                    ),
+                )
             else:
-                st.button("Logout", on_click=lambda: st.markdown(
-                    '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/logout">',
-                    unsafe_allow_html=True))
+                st.button(
+                    "Logout",
+                    on_click=lambda: st.markdown(
+                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/logout">',
+                        unsafe_allow_html=True,
+                    ),
+                )
