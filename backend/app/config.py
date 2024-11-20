@@ -4,7 +4,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     CLIENT_ID: str
     CLIENT_SECRET: str
-    REDIRECT_URI: str = "http://localhost:8000/auth/callback"
+    FRONTEND_URL: str
+    REDIRECT_URI: str
 
     class Config:
         env_file = ".env"
@@ -26,4 +27,4 @@ tags_metadata = [
         "name": "phrasal_verbs",
         "description": "Operations for retrieving phrasal verbs"
     }
-] 
+]

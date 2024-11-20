@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from config import config
 
 
 # State Management
@@ -14,7 +15,7 @@ class SessionState:
 
 # API Handlers
 class APIHandler:
-    BASE_URL = "http://localhost:8000"
+    BASE_URL = config.BACKEND_URL
 
     @staticmethod
     def save_api_key(api_key: str):
@@ -86,7 +87,7 @@ class UI:
                 st.button(
                     "Login with Google",
                     on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/login">',
+                        f'<meta http-equiv="refresh" content="0;url={APIHandler.BASE_URL}/auth/login">',
                         unsafe_allow_html=True,
                     ),
                 )
@@ -94,7 +95,7 @@ class UI:
                 st.button(
                     "Logout",
                     on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/logout">',
+                        f'<meta http-equiv="refresh" content="0;url={APIHandler.BASE_URL}/auth/logout">',
                         unsafe_allow_html=True,
                     ),
                 )
