@@ -27,7 +27,14 @@ async def login():
 async def logout():
     """Forget the user's session."""
     response = RedirectResponse(url=settings.FRONTEND_URL)
-    response.delete_cookie(key="token")
+    response.delete_cookie(
+        key="token",
+        httponly=True,
+        secure=True,        # Changed from False to True
+        samesite="none",    # Changed from "lax" to "none"
+        path="/",
+        domain=settings.FRONTEND_URL
+    )
     return response
 
 @router.get("/callback")
@@ -53,9 +60,11 @@ async def login_callback(request: Request):
     response.set_cookie(
         key="token",
         value=token,
-        httponly=True,  # Prevents JavaScript access
-        secure=False,   # Set to True in production with HTTPS
-        samesite="lax", # Protects against CSRF
-        max_age=30 * 24 * 60 * 60  # 30 days in seconds
+        httponly=True,
+        secure=True,
+        samesite="none",
+        max_age=30 * 24 * 60 * 60,
+        domain=settings.FRONTEND_URL,
+        path="/"
     )
     return response 
