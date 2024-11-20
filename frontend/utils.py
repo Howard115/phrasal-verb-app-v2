@@ -18,18 +18,27 @@ class APIHandler:
     BASE_URL = config.BACKEND_URL
 
     @staticmethod
+    def _get_request_kwargs():
+        return {
+            "cookies": st.context.cookies,
+            "headers": {
+                "Origin": config.FRONTEND_URL
+            }
+        }
+
+    @staticmethod
     def save_api_key(api_key: str):
-        response = requests.post(
+        return requests.post(
             f"{APIHandler.BASE_URL}/api-keys",
             json={"api_key": api_key},
-            cookies=st.context.cookies,
+            **APIHandler._get_request_kwargs()
         )
-        return response
 
     @staticmethod
     def delete_api_key():
         return requests.delete(
-            f"{APIHandler.BASE_URL}/api-keys", cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/api-keys",
+            **APIHandler._get_request_kwargs()
         )
 
     @staticmethod
@@ -37,12 +46,15 @@ class APIHandler:
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/generate-story",
             json={"phrasal_verbs": phrasal_verbs},
-            cookies=st.context.cookies,
+            **APIHandler._get_request_kwargs()
         )
 
     @staticmethod
     def get_random_phrasal_verb():
-        response = requests.get(f"{APIHandler.BASE_URL}/phrasal-verbs/random")
+        response = requests.get(
+            f"{APIHandler.BASE_URL}/phrasal-verbs/random",
+            **APIHandler._get_request_kwargs()
+        )
         return response.json()
 
     @staticmethod
@@ -50,20 +62,21 @@ class APIHandler:
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
             json={"phrasal_verbs": phrasal_verbs, "story": story},
-            cookies=st.context.cookies,
+            **APIHandler._get_request_kwargs()
         )
 
     @staticmethod
     def get_favorites():
         return requests.get(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites", cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
+            **APIHandler._get_request_kwargs()
         )
 
     @staticmethod
     def delete_favorite(favorite_id: int):
         return requests.delete(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites/{favorite_id}",
-            cookies=st.context.cookies,
+            **APIHandler._get_request_kwargs()
         )
 
 

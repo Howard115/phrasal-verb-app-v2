@@ -27,11 +27,14 @@ async def login():
 async def logout():
     """Forget the user's session."""
     response = RedirectResponse(url=settings.FRONTEND_URL)
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Origin"] = settings.FRONTEND_URL
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     response.delete_cookie(
         key="token",
         httponly=True,
-        secure=True,        # Changed from False to True
-        samesite="none",    # Changed from "lax" to "none"
+        secure=True,
+        samesite="none",
         path="/",
         domain=settings.FRONTEND_URL
     )
@@ -57,6 +60,9 @@ async def login_callback(request: Request):
     )
     
     response = RedirectResponse(url=settings.FRONTEND_URL)
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Origin"] = settings.FRONTEND_URL
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     response.set_cookie(
         key="token",
         value=token,
