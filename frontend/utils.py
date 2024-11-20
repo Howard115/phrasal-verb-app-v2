@@ -22,8 +22,10 @@ class APIHandler:
         return {
             "cookies": st.context.cookies,
             "headers": {
-                "Origin": config.FRONTEND_URL
-            }
+                "Origin": config.frontend_origin
+            },
+            "verify": True,
+            "allow_redirects": True
         }
 
     @staticmethod
@@ -97,18 +99,8 @@ class UI:
             is_authenticated = "token" in st.context.cookies
 
             if not is_authenticated:
-                st.button(
-                    "Login with Google",
-                    on_click=lambda: st.markdown(
-                        f'<meta http-equiv="refresh" content="0;url={APIHandler.BASE_URL}/auth/login">',
-                        unsafe_allow_html=True,
-                    ),
-                )
+                if st.button("Login with Google"):
+                    st.switch_page(f"{APIHandler.BASE_URL}/auth/login")
             else:
-                st.button(
-                    "Logout",
-                    on_click=lambda: st.markdown(
-                        f'<meta http-equiv="refresh" content="0;url={APIHandler.BASE_URL}/auth/logout">',
-                        unsafe_allow_html=True,
-                    ),
-                )
+                if st.button("Logout"):
+                    st.switch_page(f"{APIHandler.BASE_URL}/auth/logout")
