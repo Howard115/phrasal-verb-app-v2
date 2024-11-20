@@ -26,7 +26,7 @@ async def login():
 @router.get("/logout")
 async def logout():
     """Forget the user's session."""
-    response = RedirectResponse(url="http://localhost:8501")
+    response = RedirectResponse(url=settings.FRONTEND_URL)
     response.delete_cookie(key="token")
     return response
 
@@ -49,7 +49,7 @@ async def login_callback(request: Request):
         algorithm="HS256"
     )
     
-    response = RedirectResponse(url="http://localhost:8501")
+    response = RedirectResponse(url=settings.FRONTEND_URL)
     response.set_cookie(
         key="token",
         value=token,
