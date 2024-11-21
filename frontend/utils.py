@@ -98,13 +98,11 @@ class UI:
                     ),
                 )
             else:
-                st.button(
-                    "Logout",
-                    on_click=lambda: (
-                        cookie_controller.remove("token"),
-                        st.markdown(
-                            '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
-                            unsafe_allow_html=True,
-                        )
-                    ),
-                )
+                def handle_logout():
+                    cookie_controller.remove("token")
+                    st.markdown(
+                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
+                        unsafe_allow_html=True,
+                    )
+                
+                st.button("Logout", on_click=handle_logout)
