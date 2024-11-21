@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+from streamlit_cookies_controller import CookieController
+
+cookie_controller = CookieController()
 
 
 # State Management
@@ -10,6 +13,9 @@ class SessionState:
             st.session_state.phrasal_verbs = [None] * 3
         if "story" not in st.session_state:
             st.session_state.story = None
+        if "token" in st.query_params:
+            cookie_controller.set("token", st.query_params["token"])
+            st.query_params.clear()
 
 
 # API Handlers
