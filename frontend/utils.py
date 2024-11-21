@@ -20,7 +20,7 @@ class SessionState:
 
 # API Handlers
 class APIHandler:
-    BASE_URL = "http://localhost:8000"
+    BASE_URL = "https://phr-backend.hnd1.zeabur.app"
 
     @staticmethod
     def save_api_key(api_key: str):
@@ -92,7 +92,7 @@ class UI:
                 st.button(
                     "Login with Google",
                     on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/login">',
+                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/login">',
                         unsafe_allow_html=True,
                     ),
                 )
@@ -100,7 +100,7 @@ class UI:
                 st.button(
                     "Logout",
                     on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=http://localhost:8000/auth/logout">',
+                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
                         unsafe_allow_html=True,
                     ),
                 )

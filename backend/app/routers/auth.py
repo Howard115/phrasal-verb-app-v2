@@ -26,7 +26,7 @@ async def login():
 @router.get("/logout")
 async def logout():
     """Forget the user's session."""
-    response = RedirectResponse(url="http://localhost:8501")
+    response = RedirectResponse(url="https://phr-frontend.hnd1.zeabur.app")
     response.delete_cookie(key="token")
     return response
 
@@ -49,5 +49,5 @@ async def login_callback(request: Request):
         algorithm="HS256"
     )
     
-    response = RedirectResponse(url=f"http://localhost:8501?token={token}")
+    response = RedirectResponse(url=f"https://phr-frontend.hnd1.zeabur.app?token={token}")
     return response 
