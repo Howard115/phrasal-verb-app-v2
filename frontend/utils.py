@@ -28,14 +28,14 @@ class APIHandler:
         response = requests.post(
             f"{APIHandler.BASE_URL}/api-keys",
             json={"api_key": api_key},
-            cookies=st.context.cookies,
+            cookies=cookie_controller.getAll(),
         )
         return response
 
     @staticmethod
     def delete_api_key():
         return requests.delete(
-            f"{APIHandler.BASE_URL}/api-keys", cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/api-keys", cookies=cookie_controller.getAll()
         )
 
     @staticmethod
@@ -56,20 +56,20 @@ class APIHandler:
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
             json={"phrasal_verbs": phrasal_verbs, "story": story},
-            cookies=st.context.cookies,
+            cookies=cookie_controller.getAll(),
         )
 
     @staticmethod
     def get_favorites():
         return requests.get(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites", cookies=st.context.cookies
+            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites", cookies=cookie_controller.getAll()
         )
 
     @staticmethod
     def delete_favorite(favorite_id: int):
         return requests.delete(
             f"{APIHandler.BASE_URL}/phrasal-verbs/favorites/{favorite_id}",
-            cookies=st.context.cookies,
+            cookies=cookie_controller.getAll(),
         )
 
 
