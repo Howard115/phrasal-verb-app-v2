@@ -16,6 +16,7 @@ class SessionState:
         if "token" in st.query_params:
             cookie_controller.set("token", st.query_params["token"])
             st.query_params.clear()
+            
 
 
 # API Handlers
@@ -86,7 +87,7 @@ class UI:
     def render_auth_sidebar():
         with st.sidebar:
             st.title("Login")
-            is_authenticated = "token" in st.context.cookies
+            is_authenticated = cookie_controller.get("token") is not None
 
             if not is_authenticated:
                 st.button(
