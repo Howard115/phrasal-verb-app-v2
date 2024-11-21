@@ -43,7 +43,7 @@ class APIHandler:
         return requests.post(
             f"{APIHandler.BASE_URL}/phrasal-verbs/generate-story",
             json={"phrasal_verbs": phrasal_verbs},
-            cookies=st.context.cookies,
+            cookies=cookie_controller.getAll()
         )
 
     @staticmethod
