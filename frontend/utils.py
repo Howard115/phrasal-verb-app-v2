@@ -87,7 +87,7 @@ class UI:
     def render_auth_sidebar():
         with st.sidebar:
             st.title("Login")
-            is_authenticated = cookie_controller.get("token") is not None
+            is_authenticated = "token" in cookie_controller.getAll()
 
             if not is_authenticated:
                 st.button(
@@ -100,8 +100,11 @@ class UI:
             else:
                 st.button(
                     "Logout",
-                    on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
-                        unsafe_allow_html=True,
+                    on_click=lambda: (
+                        cookie_controller.remove("token"),
+                        st.markdown(
+                            '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
+                            unsafe_allow_html=True,
+                        )
                     ),
                 )
