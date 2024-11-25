@@ -1,10 +1,14 @@
 import streamlit as st
 import requests
 from streamlit_cookies_controller import CookieController
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cookie_controller = CookieController()
 
-BACKEND_URL = st.secrets.get("BACKEND_URL", "https://phr-backend.hnd1.zeabur.app")
+BACKEND_URL = os.getenv("BACKEND_URL", "https://phr-backend.hnd1.zeabur.app")
 
 
 # State Management
