@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import APIHandler, UI
+from utils import APIHandler, UI, cookie_controller
 
 st.set_page_config(page_title="API Key Configuration", page_icon="🔑", layout="wide")
 
@@ -7,7 +7,7 @@ st.set_page_config(page_title="API Key Configuration", page_icon="🔑", layout=
 UI.render_auth_sidebar()
 
 # Check authentication status
-is_authenticated = "token" in st.context.cookies
+is_authenticated = "token" in cookie_controller.getAll()
 
 if not is_authenticated:
     st.error("Please login first to access this page")

@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import APIHandler, UI
+from utils import APIHandler, UI, cookie_controller
 
 st.set_page_config(page_title="Favorite Stories", page_icon="⭐", layout="wide")
 
@@ -10,7 +10,7 @@ if "refresh_favorites" not in st.session_state:
 # Render auth sidebar
 UI.render_auth_sidebar()
 
-is_authenticated = "token" in st.context.cookies
+is_authenticated = "token" in cookie_controller.getAll()
 
 if not is_authenticated:
     st.error("Please log in to view your favorite stories")
