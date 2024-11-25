@@ -1,5 +1,6 @@
 import streamlit as st
 from utils import APIHandler, UI, cookie_controller
+import re
 
 st.set_page_config(page_title="Favorite Stories", page_icon="⭐", layout="wide")
 
@@ -39,13 +40,17 @@ st.markdown(
 }
 .highlighted-pv {
     color: #0f52ba;
-    font-weight: bold;
+}
+.blue-word {
+    color: #0f52ba;
 }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
+def highlight_uppercase_words(text):
+    return re.sub(r'\b(?!I\b)[A-Z]+\b', lambda m: f'<span class="blue-word">{m.group(0).lower()}</span>', text)
 
 def delete_favorite(favorite_id: int):
     response = APIHandler.delete_favorite(favorite_id)
@@ -86,7 +91,7 @@ if response.status_code == 200:
                     f"""
                     <div class="pv-item">
                         <strong>{pv['phrasal_verb']}</strong>: {pv['meaning']}
-                        <div class="pv-example">Example: {pv['example']}</div>
+                        <div class="pv-example">Example: {highlight_uppercase_words(pv['example'])}</div>
                     </div>
                 """,
                     unsafe_allow_html=True,

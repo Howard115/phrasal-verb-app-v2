@@ -1,7 +1,36 @@
 import streamlit as st
 from utils import SessionState, APIHandler, UI
+import re
 
 st.set_page_config(page_title="Story Generator", page_icon="📝", layout="wide")
+
+# Add custom CSS styling to match favorite stories page
+st.markdown(
+    """
+<style>
+.pv-title {
+    color: #0f52ba;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.pv-item {
+    margin: 10px 0;
+    padding-left: 15px;
+    border-left: 3px solid #0f52ba;
+}
+.pv-example {
+    color: #666;
+    font-style: italic;
+    margin-left: 15px;
+}
+.highlighted-pv {
+    color: #0f52ba;
+    font-weight: bold;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 
 def get_random_phrasal_verb(index: int):
@@ -29,6 +58,10 @@ def save_favorite():
         st.error("Failed to save story to favorites")
 
 
+def highlight_uppercase_words(text):
+    return re.sub(r'\b(?!I\b)[A-Z]+\b', lambda m: f'<span style="color: #0f52ba;">{m.group(0).lower()}</span>', text)
+
+
 SessionState.init()
 UI.render_auth_sidebar()
 
@@ -39,7 +72,18 @@ columns = st.columns(3)
 for i, col in enumerate(columns):
     with col:
         st.button(f"Phrasal Verb {i+1}", on_click=get_random_phrasal_verb, args=(i,))
-        UI.display_phrasal_verb_entry(st.session_state.phrasal_verbs[i])
+        if st.session_state.phrasal_verbs[i]:
+            pv = st.session_state.phrasal_verbs[i]
+            example = highlight_uppercase_words(pv['example'])
+            st.markdown(
+                f"""
+                <div class="pv-item">
+                    <strong>{pv['phrasal_verb']}</strong>: {pv['meaning']}
+                    <div class="pv-example">Example: {example}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 st.button(
     "Generate Story",
@@ -49,7 +93,16 @@ st.button(
 
 if st.session_state.story:
     st.write("**Generated Story:**")
-    st.write(st.session_state.story)
+    # Convert markdown bold syntax to HTML span with custom class
+    story_text = st.session_state.story.replace("**", '<span class="highlighted-pv">', 1)
+    while "**" in story_text:
+        story_text = story_text.replace("**", "</span>", 1)
+        if "**" in story_text:
+            story_text = story_text.replace("**", '<span class="highlighted-pv">', 1)
+    st.markdown(story_text, unsafe_allow_html=True)
+    
     st.button(
         "Save to Favorites", on_click=save_favorite, disabled=not st.session_state.story
     )
+
+st.write(st.session_state.phrasal_verbs)
