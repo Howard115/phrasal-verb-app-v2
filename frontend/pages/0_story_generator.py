@@ -78,8 +78,8 @@ for i, col in enumerate(columns):
             st.markdown(
                 f"""
                 <div class="pv-item">
-                    <strong>{pv['phrasal_verb']}</strong>: {pv['meaning']}
-                    <div class="pv-example">Example: {example}</div>
+                    <strong>{pv['phrasal_verb']}</strong><span style="color : #EFFF4B"> : </span> {pv['meaning']}
+                    <div class="pv-example">Example<span style="color: #EFFF4B"> : </span> {example}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -104,5 +104,3 @@ if st.session_state.story:
     st.button(
         "Save to Favorites", on_click=save_favorite, disabled=not st.session_state.story
     )
-
-st.write(st.session_state.phrasal_verbs)

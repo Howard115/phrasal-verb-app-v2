@@ -90,8 +90,8 @@ if response.status_code == 200:
                 st.markdown(
                     f"""
                     <div class="pv-item">
-                        <strong>{pv['phrasal_verb']}</strong>: {pv['meaning']}
-                        <div class="pv-example">Example: {highlight_uppercase_words(pv['example'])}</div>
+                        <strong>{pv['phrasal_verb']}</strong><span style="color : #EFFF4B"> : </span> {pv['meaning']}
+                        <div class="pv-example">Example<span style="color: #EFFF4B"> : </span> {highlight_uppercase_words(pv['example'])}</div>
                     </div>
                 """,
                     unsafe_allow_html=True,
