@@ -14,7 +14,7 @@ router = APIRouter(
 sso = GoogleSSO(
     client_id=settings.CLIENT_ID,
     client_secret=settings.CLIENT_SECRET,
-    redirect_uri=settings.REDIRECT_URI
+    redirect_uri=f"{settings.BACKEND_URL}/auth/callback"
 )
 
 @router.get("/login")
@@ -26,7 +26,7 @@ async def login():
 @router.get("/logout")
 async def logout():
     """Forget the user's session."""
-    response = RedirectResponse(url="https://phr-frontend.hnd1.zeabur.app")
+    response = RedirectResponse(url=settings.FRONTEND_URL)
     response.delete_cookie(key="token")
     return response
 
@@ -49,5 +49,5 @@ async def login_callback(request: Request):
         algorithm="HS256"
     )
     
-    response = RedirectResponse(url=f"https://phr-frontend.hnd1.zeabur.app?token={token}")
+    response = RedirectResponse(url=f"{settings.FRONTEND_URL}?token={token}")
     return response 

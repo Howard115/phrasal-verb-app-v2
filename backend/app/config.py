@@ -4,7 +4,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     CLIENT_ID: str
     CLIENT_SECRET: str
-    REDIRECT_URI: str = "https://phr-backend.hnd1.zeabur.app/auth/callback"
+    BACKEND_URL: str = "https://phr-backend.hnd1.zeabur.app"
+    FRONTEND_URL: str = "https://phr-frontend.hnd1.zeabur.app"
 
     class Config:
         env_file = ".env"

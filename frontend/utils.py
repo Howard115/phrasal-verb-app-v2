@@ -4,6 +4,8 @@ from streamlit_cookies_controller import CookieController
 
 cookie_controller = CookieController()
 
+BACKEND_URL = st.secrets.get("BACKEND_URL", "https://phr-backend.hnd1.zeabur.app")
+
 
 # State Management
 class SessionState:
@@ -21,12 +23,12 @@ class SessionState:
 
 # API Handlers
 class APIHandler:
-    BASE_URL = "https://phr-backend.hnd1.zeabur.app"
+    BACKEND_URL = BACKEND_URL
 
     @staticmethod
     def save_api_key(api_key: str):
         response = requests.post(
-            f"{APIHandler.BASE_URL}/api-keys",
+            f"{APIHandler.BACKEND_URL}/api-keys",
             json={"api_key": api_key},
             cookies=cookie_controller.getAll(),
         )
@@ -35,26 +37,26 @@ class APIHandler:
     @staticmethod
     def delete_api_key():
         return requests.delete(
-            f"{APIHandler.BASE_URL}/api-keys", cookies=cookie_controller.getAll()
+            f"{APIHandler.BACKEND_URL}/api-keys", cookies=cookie_controller.getAll()
         )
 
     @staticmethod
     def generate_story(phrasal_verbs):
         return requests.post(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/generate-story",
+            f"{APIHandler.BACKEND_URL}/phrasal-verbs/generate-story",
             json={"phrasal_verbs": phrasal_verbs},
             cookies=cookie_controller.getAll()
         )
 
     @staticmethod
     def get_random_phrasal_verb():
-        response = requests.get(f"{APIHandler.BASE_URL}/phrasal-verbs/random")
+        response = requests.get(f"{APIHandler.BACKEND_URL}/phrasal-verbs/random")
         return response.json()
 
     @staticmethod
     def save_favorite_story(phrasal_verbs, story):
         return requests.post(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites",
+            f"{APIHandler.BACKEND_URL}/phrasal-verbs/favorites",
             json={"phrasal_verbs": phrasal_verbs, "story": story},
             cookies=cookie_controller.getAll(),
         )
@@ -62,13 +64,13 @@ class APIHandler:
     @staticmethod
     def get_favorites():
         return requests.get(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites", cookies=cookie_controller.getAll()
+            f"{APIHandler.BACKEND_URL}/phrasal-verbs/favorites", cookies=cookie_controller.getAll()
         )
 
     @staticmethod
     def delete_favorite(favorite_id: int):
         return requests.delete(
-            f"{APIHandler.BASE_URL}/phrasal-verbs/favorites/{favorite_id}",
+            f"{APIHandler.BACKEND_URL}/phrasal-verbs/favorites/{favorite_id}",
             cookies=cookie_controller.getAll(),
         )
 
@@ -93,7 +95,7 @@ class UI:
                 st.button(
                     "Login with Google",
                     on_click=lambda: st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/login">',
+                        f'<meta http-equiv="refresh" content="0;url={BACKEND_URL}/auth/login">',
                         unsafe_allow_html=True,
                     ),
                 )
@@ -101,7 +103,7 @@ class UI:
                 def handle_logout():
                     cookie_controller.remove("token")
                     st.markdown(
-                        '<meta http-equiv="refresh" content="0;url=https://phr-backend.hnd1.zeabur.app/auth/logout">',
+                        f'<meta http-equiv="refresh" content="0;url={BACKEND_URL}/auth/logout">',
                         unsafe_allow_html=True,
                     )
                 
