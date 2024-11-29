@@ -79,8 +79,44 @@ class APIHandler:
         )
 
 
+# Common Styles
+class Styles:
+    @staticmethod
+    def get_common_styles():
+        return """
+        <style>
+        .pv-title {
+            color: #0f52ba;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .pv-item {
+            margin: 10px 0;
+            padding-left: 15px;
+            border-left: 3px solid #0f52ba;
+        }
+        .pv-example {
+            color: #666;
+            font-style: italic;
+            margin-left: 15px;
+        }
+        .highlighted-pv {
+            color: #0f52ba;
+            font-weight: bold;
+        }
+        .blue-word {
+            color: #0f52ba;
+        }
+        </style>
+        """
+
+
 # UI Components
 class UI:
+    @staticmethod
+    def apply_common_styles():
+        st.markdown(Styles.get_common_styles(), unsafe_allow_html=True)
+
     @staticmethod
     def display_phrasal_verb_entry(phrasal_verb_entry):
         if not phrasal_verb_entry:
@@ -112,3 +148,13 @@ class UI:
                     )
                 
                 st.button("Logout", on_click=handle_logout)
+
+    @staticmethod
+    def format_story_text(story_text):
+        # Convert markdown bold syntax to HTML span with custom class
+        story_text = story_text.replace("**", '<span class="highlighted-pv">', 1)
+        while "**" in story_text:
+            story_text = story_text.replace("**", "</span>", 1)
+            if "**" in story_text:
+                story_text = story_text.replace("**", '<span class="highlighted-pv">', 1)
+        return story_text
