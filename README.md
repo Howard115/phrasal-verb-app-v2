@@ -11,16 +11,24 @@
 ![App Demo](frontend/asset/demo.gif)
 
 ### Quick Start Guide for Learners
-1. **Access**: Visit [app URL]
+1. **Access**: Visit [Phrasal Verb Learning App](https://phr-frontend.hnd1.zeabur.app)
 2. **Login**: Click "Login with Google" in the sidebar
 3. **Start Learning**:
+   - Add your OpenAI API key in "API Key Config"
    - Go to "Story Generator"
    - Click buttons to get random phrasal verbs
-   - Generate stories using these verbs
+   - Generate persuasive mini-arguments featuring your selected verbs
+   - Each story includes:
+     * A serious academic claim
+     * Logical cause-and-effect reasoning
+     * A surprising or humorous twist
+     * A witty conclusion
    - Save your favorites for review
 
 ### Learning Tips
-- Generate multiple stories with the same verbs to see different contexts
+- Stories are concise (under 50 words) and highlight phrasal verbs in **bold**
+- Each story follows a consistent format to aid learning
+- Generate multiple stories with the same verbs to see different argumentative contexts
 - Use the highlighted examples as memory aids
 - Review your saved stories regularly
 - Try creating your own sentences with learned phrasal verbs
