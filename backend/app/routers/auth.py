@@ -41,7 +41,7 @@ async def login_callback(request: Request):
     expiration = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=30)
     token = jwt.encode(
         {
-            "pld": openid.dict(),
+            "pld": openid.model_dump(),
             "exp": expiration,
             "sub": openid.id
         },
