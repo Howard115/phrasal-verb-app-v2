@@ -150,7 +150,8 @@ async def get_favorite_stories(
         result.append(FavoriteStorySet(
             id=fav.id,
             story=fav.story,
-            phrasal_verbs=phrasal_verbs
+            phrasal_verbs=phrasal_verbs,
+            created_at=fav.created_at
         ))
     
     return result

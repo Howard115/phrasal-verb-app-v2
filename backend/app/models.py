@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel, Field
 from typing import List
+from sqlalchemy.sql import func
 
 from .database import Base
 
@@ -63,6 +64,7 @@ class FavoriteStorySet(BaseModel):
     id: int | None = None
     phrasal_verbs: List[PhrasalVerbEntry]
     story: str
+    created_at: str | None = None
 
 
 class FavoriteStory(Base):
@@ -72,3 +74,4 @@ class FavoriteStory(Base):
     email = Column(String, index=True)
     story = Column(String)
     phrasal_verbs = Column(String)  # We'll store as JSON string
+    created_at = Column(String, default=func.now())  # Add current date

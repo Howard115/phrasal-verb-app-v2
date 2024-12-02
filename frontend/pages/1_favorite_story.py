@@ -17,7 +17,7 @@ def delete_favorite(favorite_id: int):
 def display_favorite_story(favorite):
     col1, col2 = st.columns([0.9, 0.1])
     with col1:
-        expander = st.expander(f"Favorite Story {favorite['id']}")
+        expander = st.expander(f"Favorite Story {favorite['id']} - Created: {favorite['created_at']}")
     with col2:
         st.button(
             "🗑️",
