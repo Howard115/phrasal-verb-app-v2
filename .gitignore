@@ -164,6 +164,7 @@ cython_debug/
 # test
 test_api.sh
 test_api_output.json
+test/*
 
 # Environment variables
 *.env
