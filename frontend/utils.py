@@ -129,8 +129,9 @@ class UI:
     def render_auth_sidebar():
         with st.sidebar:
             st.title("Login")
+            cookie_controller.set("token", st.context.cookies["token"]) if "token" in st.context.cookies else None
             is_authenticated = "token" in cookie_controller.getAll()
-
+            
             if not is_authenticated:
                 st.button(
                     "Login with Google",
