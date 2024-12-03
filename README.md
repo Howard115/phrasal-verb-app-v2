@@ -8,7 +8,7 @@
 - Track your progress with saved stories
 - User-friendly interface designed for learning
 
-<img src="frontend/asset/demo.gif" width="600" height="auto" alt="App Demo"/>
+<img src="frontend/asset/demo.gif" width="550" height="auto" alt="App Demo"/>
 
 ### Quick Start Guide for Learners
 1. **Access**: Visit [Phrasal Verb Learning App](https://phr-frontend.hnd1.zeabur.app)
